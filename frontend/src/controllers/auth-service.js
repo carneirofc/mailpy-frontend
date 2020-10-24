@@ -54,7 +54,7 @@ class AuthService {
                 if (error instanceof msal.InteractionRequiredAuthError) {
                     throw new InteractiveSignInRequired();
                 }
-                if (error instanceof msal.ClientAuthError) {
+                if (error instanceof msal.AuthError) {
                     // On mobile devices, ClientAuthError is sometimes thrown when we
 
                     // can't do silent auth - this isn't generally an issue here.
@@ -62,7 +62,7 @@ class AuthService {
                     if (error.errorCode === "block_token_requests") {
                         throw new InteractiveSignInRequired();
                     }
-                    console.warn("ClientAuthError: error code = ", error.errorCode);
+                    console.warn("AuthError: error code = ", error.errorCode);
                 }
                 throw error;
             }

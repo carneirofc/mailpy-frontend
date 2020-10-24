@@ -16,4 +16,4 @@ const store = createStore(
     enhancer
 );
 
-export { store };
+export default store;
