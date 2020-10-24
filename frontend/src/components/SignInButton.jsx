@@ -31,9 +31,10 @@ const GreenButton = withStyles((theme) => ({
     },
 }))(ListItem);
 
-const SignInButton = () => {
+const SignInButton = (props) => {
     const identity = useSelector((state) => state.identity);
     const dispatch = useDispatch();
+    const { style } = props;
 
     const onClickHandler = () => {
         dispatch(identity ? ActionSignOut() : ActionSignIn());
@@ -42,14 +43,14 @@ const SignInButton = () => {
     const renderButton = () => {
         if (identity) {
             return (
-                <RedButton button onClick={onClickHandler}>
-                    <ListItemText>Sign Out</ListItemText>
+                <RedButton button onClick={onClickHandler} style={style}>
+                    <ListItemText style={{ 'text-align': "center"}} >Sign Out</ListItemText>
                 </RedButton>
             );
         } else {
             return (
-                <GreenButton button onClick={onClickHandler}>
-                    <ListItemText>Sign In</ListItemText>
+                <GreenButton button onClick={onClickHandler} style={style}>
+                    <ListItemText style={{ 'text-align': "center"}} >Sign In</ListItemText>
                 </GreenButton>
             );
         }
