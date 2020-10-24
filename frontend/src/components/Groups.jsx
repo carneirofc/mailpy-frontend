@@ -2,7 +2,7 @@ import React from "react";
 
 import { DataGrid } from "@material-ui/data-grid";
 
-import api from "../api";
+import MailpyController from "../controllers/Mailpy";
 
 const columns = [
     {field: "name", headerName: "Name", width: 240},
@@ -19,10 +19,7 @@ class Groups extends React.Component {
     }
 
     updateGroups = async () => {
-        const data = await api.getGroups();
-        data.forEach(e=> {
-            e.id = e._id;
-        });
+        const data = await MailpyController.getGroups();
         this.setState({ groups: data });
     }
 

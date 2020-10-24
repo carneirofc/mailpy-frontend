@@ -1,12 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
+
+import "./css/index.css";
+
 import * as serviceWorker from "./serviceWorker";
+
+import { Provider } from "react-redux";
+import { MemoryRouter } from 'react-router-dom';
+import store  from "./store";
+
+import App from "./components/App";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <Provider store={store}>
+            <MemoryRouter basename={window.location.pathname}>
+                <App />
+            </MemoryRouter>
+        </Provider>,
     </React.StrictMode>,
     document.getElementById("root")
 );

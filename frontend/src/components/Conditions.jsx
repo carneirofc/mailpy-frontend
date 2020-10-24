@@ -2,7 +2,7 @@ import React from "react";
 
 import { DataGrid } from "@material-ui/data-grid";
 
-import api from "../api";
+import MailpyController from "../controllers/Mailpy";
 
 const columns = [
     {field: "name", headerName: "Condition", width: 240},
@@ -18,10 +18,7 @@ class Conditions extends React.Component {
     }
 
     updateConditions = async () => {
-        const conditions = await api.getConditions();
-        conditions.forEach(e=>{
-            e.id = e._id;
-        });
+        const conditions = await MailpyController.getConditions();
         this.setState({ conditions: conditions });
     }
 
