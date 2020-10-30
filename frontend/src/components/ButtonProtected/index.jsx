@@ -8,7 +8,7 @@ const ButtonProtect = ({ children, ...props }) => {
   const text = identity ? "Call Test API" : "Please Login";
   const disabled = identity ? false : true;
   const onClickHandler = async () => {
-    await api.getProtected(identity.idToken).then((res) => console.log("Protected API", res));
+    await api.getProtected(identity).then((res) => console.log("Protected API", res));
   };
   return (
     <Button variant="contained" color="primary" onClick={onClickHandler} disabled={disabled}>

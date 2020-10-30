@@ -13,7 +13,10 @@ const PROTECTED_URL = config.MAILPY_API_URL + "/protected";
 class Api {
   constructor() {}
 
-  async getProtected(token) {
+  async getProtected(identity) {
+    //idToken
+    //accessToken
+    const token = identity.idToken;
     const headers = new Headers();
     const bearer = `Bearer ${token}`;
 
