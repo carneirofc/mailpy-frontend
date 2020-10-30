@@ -11,7 +11,7 @@ const Header = (props) => {
         <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h6">
-                    Mailpy - MGMT
+                    Mailpy MGMT
                 </Typography>
                 <Typography variant="subtitle2" style={{marginLeft: "20px"}}>
             In order to make changes to the mailing system, please contact
