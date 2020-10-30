@@ -1,3 +1,4 @@
+import * as msal from "@azure/msal-browser";
 const msalConfig = {
   auth: {
     clientId: "21787c54-4ba3-4270-a273-adf60bc20601",
@@ -27,7 +28,7 @@ const msalConfig = {
             return;
           case msal.LogLevel.Warning:
             console.warn(message);
-            return;
+	    return;
         }
       },
     },

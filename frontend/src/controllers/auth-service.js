@@ -31,7 +31,6 @@ const msalConfig = {
             return;
           case msal.LogLevel.Warning:
             console.warn(message);
-            return;
         }
       },
     },
@@ -55,7 +54,7 @@ class AuthService {
 
   async signIn() {
     const loginIdentity = await this.msalClient.loginPopup(loginScopes);
-    if ("accessToken" in loginIdentity && "tokenType" in loginIdentity && loginIdentity.tokenType == "Bearer") {
+    if ("accessToken" in loginIdentity && "tokenType" in loginIdentity && loginIdentity.tokenType === "Bearer") {
       console.info("Beared token already exists");
       return loginIdentity;
     }
@@ -67,7 +66,7 @@ class AuthService {
     this.msalClient.logout();
   }
 
-  /*** Return a new ideentity with a token */
+  /** * Return a new ideentity with a token */
   async acquireToken() {
     console.info("Getting a new bearer token");
     const currentAccounts = this.msalClient.getAllAccounts();

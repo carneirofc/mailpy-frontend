@@ -64,7 +64,7 @@
     "no-extra-bind": "error",
     "no-unused-expressions": "error",
     "no-useless-call": "error",
-    "no-useless-return": "error",
+    "no-useless-return": "warn",
     "radix": "warn",
 
     // modify rules from base configurations
@@ -86,44 +86,13 @@
     "require-atomic-updates": "off",
     "no-async-promise-executor": "off",
     // stylistic conventions
-    "brace-style": ["error", "1tbs"],
-    "space-before-blocks": ["error", "always"],
-    "block-spacing": "error",
-    "array-bracket-spacing": "error",
-    "comma-spacing": "error",
-    "spaced-comment": [
-      "error",
-      "always",
-      {
-        "exceptions": ["/"]
-      }
-    ],
-    "comma-style": "error",
-    "computed-property-spacing": "error",
-    "no-trailing-spaces": "warn",
+    "no-trailing-spaces": "error",
     "eol-last": "error",
     "func-call-spacing": "error",
     "key-spacing": [
       "warn",
       {
         "mode": "minimum"
-      }
-    ],
-    "indent": [
-      "error",
-      2,
-      {
-        "ignoreComments": true,
-        "ArrayExpression": "first",
-        "SwitchCase": 1
-      }
-    ],
-    "linebreak-style": ["error", "unix"],
-    "quotes": [
-      "error",
-      "double",
-      {
-        "avoidEscape": true
       }
     ],
     "camelcase": [
@@ -145,13 +114,6 @@
         }
       }
     ],
-    "keyword-spacing": [
-      "error",
-      {
-        "before": true,
-        "after": true
-      }
-    ],
     "no-multiple-empty-lines": [
       "warn",
       {
@@ -161,7 +123,6 @@
       }
     ],
     "no-whitespace-before-property": "error",
-    "operator-linebreak": ["error", "after"],
     "space-in-parens": "error",
     "no-var": "error",
     "prefer-const": "error"
