@@ -1,3 +1,3 @@
 export default {
-    MAILPY_API_URL: "https://10.0.6.61/mailpy/api"
+  MAILPY_API_URL: "https://localhost:1337/mailpy/api",
 };
