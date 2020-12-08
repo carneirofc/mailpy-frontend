@@ -1,18 +1,11 @@
 import * as msal from "@azure/msal-browser";
 import Identity from "../model/Identity";
 import InteractiveSignInRequired from "../utils/InteractiveSignInRequired";
+import { auth, cache, silentRequest, tokenRequest, loginRequest } from "../configs/msal";
 
 const msalConfig = {
-  auth: {
-    clientId: "21787c54-4ba3-4270-a273-adf60bc20601",
-    authority: "https://login.microsoftonline.com/ed764e1f-b3b8-4aaf-8fb2-1d05be08443b",
-    redirectUri: window.location.href,
-  },
-  cache: {
-    cacheLocation: "sessionStorage", // This configures where your cache will be stored
-    storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
-  },
-  // Add scopes here for access token to be used at Microsoft Graph API endpoints.
+  auth: auth,
+  cache: cache,
   system: {
     loggerOptions: {
       loggerCallback: (level, message, containsPii) => {
@@ -36,11 +29,6 @@ const msalConfig = {
     },
   },
 };
-const loginScopes = { scopes: ["User.Read", "Mail.Read"] };
-const tokenScopes = {
-  scopes: ["User.Read", "Mail.Read"],
-  forceRefresh: false /* Set this to "true" to skip a cached token and go to the server to get a new token*/,
-};
 
 class AuthService {
   constructor() {
@@ -52,63 +40,71 @@ class AuthService {
     return "Microsoft";
   }
 
-  async signIn() {
-    const loginIdentity = await this.msalClient.loginPopup(loginScopes);
-    if ("accessToken" in loginIdentity && "tokenType" in loginIdentity && loginIdentity.tokenType === "Bearer") {
-      console.info("Beared token already exists");
-      return loginIdentity;
+  getAccounts = async () => {
+    /**
+     * See here for more info on account retrieval:
+     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+     */
+    const currentAccounts = this.msalClient.getAllAccounts();
+    if (currentAccounts === null || currentAccounts.length === 0) {
+      console.error("No accounts detected!");
+      throw "No accounts detected";
     }
+    if (currentAccounts.length > 1) {
+      // Add choose account code here
+      console.warn("Multiple accounts detected.", currentAccounts);
+    }
+    return currentAccounts[0];
+  };
 
-    return await this.acquireToken();
-  }
+  handleSignInResponse = async (res) => {
+    console.info("SignIn", res);
+    if (res !== null) {
+      return res;
+    } else {
+      await this.getAccounts();
+    }
+  };
 
-  signOut() {
+  signIn = async () => {
+    return this.msalClient
+      .loginPopup(loginRequest)
+      .then((res) => this.handleSignInResponse(res))
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
+  };
+
+  signOut = () => {
     this.msalClient.logout();
-  }
+  };
 
   /** * Return a new ideentity with a token */
-  async acquireToken() {
-    console.info("Getting a new bearer token");
-    const currentAccounts = this.msalClient.getAllAccounts();
-    if (currentAccounts === null) {
-      console.error("Not account connected");
-      throw new InteractiveSignInRequired();
-    } else if (currentAccounts.length > 1) {
-      // Add choose account code here...
-      console.error("Multiple accounts detected. This should never happen here.");
-      throw new InteractiveSignInRequired();
-    }
+  acquireToken = async (username) => {
+    /**
+     * See here for more info on account retrieval:
+     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+     */
+    silentRequest.account = this.msalClient.getAccountByUsername(username);
+    return this.msalClient.acquireTokenSilent(silentRequest).catch((error) => {
+      console.warn("Silent token acquisition fails. acquiring token using interactive method");
+      if (error) {
+        // fallback to interaction when silent call fails
+        tokenRequest.account = this.msalClient.getAccountByUsername(username);
+        console.log("TokenRequest", tokenRequest);
 
-    const username = currentAccounts[0].username;
-    const tokenRequest = {
-      account: this.msalClient.getAccountByUsername(username),
-      ...tokenScopes,
-    };
-
-    if (tokenRequest.account) {
-      try {
-        const response = await this.msalClient.acquireTokenSilent(tokenRequest);
-        return new Identity(response);
-      } catch (error) {
-        console.error("Silent token acquisition fails.");
-        if (error instanceof msal.InteractionRequiredAuthError) {
-          throw new InteractiveSignInRequired();
-        }
-        if (error instanceof msal.AuthError) {
-          // On mobile devices, ClientAuthError is sometimes thrown when we
-
-          // can't do silent auth - this isn't generally an issue here.
-
-          if (error.errorCode === "block_token_requests") {
-            throw new InteractiveSignInRequired();
-          }
-          console.warn("AuthError: error code = ", error.errorCode);
-        }
-        throw error;
+        return this.msalClient
+          .acquireTokenPopup(tokenRequest)
+          .then(this.handleResponse)
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        console.warn(error);
       }
-    }
-    throw new InteractiveSignInRequired();
-  }
+    });
+  };
 }
 
 const authService = new AuthService();

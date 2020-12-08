@@ -4,7 +4,9 @@
 class Identity {
   constructor(tokenResponse) {
     this.account = tokenResponse.account;
-    this.rawIdToken = tokenResponse.idToken.rawIdToken;
+    this.idToken = tokenResponse.idToken;
+    this.accessToken = tokenResponse.accessToken;
+    this.raw = tokenResponse;
   }
 
   get userId() {
@@ -20,7 +22,11 @@ class Identity {
   }
 
   get idToken() {
-    return this.rawIdToken;
+    return this.idToken;
+  }
+
+  getAccessToken() {
+    return this.accessToken;
   }
 }
 export default Identity;

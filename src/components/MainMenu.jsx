@@ -11,11 +11,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import SignInButton from "./SignInButton";
 
-function MainMenu(props) {
+const MainMenu = (props) => {
   const { classes } = props;
-  const identity = useSelector((state) => state.identity);
-  const name = identity ? identity.account.name : "disconnected";
-  const email = identity ? identity.account.username : "please login";
+
+  const auth = useSelector((state) => state.auth);
+
+  const name = auth.name ? auth.name : "disconnected";
+  const email = auth.username ? auth.username : "please login";
 
   const renderButtons = () => {
     return [
@@ -53,7 +55,7 @@ function MainMenu(props) {
       </List>
     </Drawer>
   );
-}
+};
 MainMenu.propTypes = {
   classes: PropTypes.object.isRequired,
 };

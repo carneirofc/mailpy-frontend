@@ -1,42 +1,30 @@
-import * as msal from "@azure/msal-browser";
-const msalConfig = {
-  auth: {
-    clientId: "21787c54-4ba3-4270-a273-adf60bc20601",
-    authority: "https://login.microsoftonline.com/ed764e1f-b3b8-4aaf-8fb2-1d05be08443b",
-    redirectUri: window.location.href,
-  },
-  cache: {
-    cacheLocation: "sessionStorage", // This configures where your cache will be stored
-    storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
-  },
-  // Add scopes here for access token to be used at Microsoft Graph API endpoints.
-  system: {
-    loggerOptions: {
-      loggerCallback: (level, message, containsPii) => {
-        if (containsPii) {
-          return;
-        }
-        switch (level) {
-          case msal.LogLevel.Error:
-            console.error(message);
-            return;
-          case msal.LogLevel.Info:
-            console.info(message);
-            return;
-          case msal.LogLevel.Verbose:
-            console.debug(message);
-            return;
-          case msal.LogLevel.Warning:
-            console.warn(message);
-	    return;
-        }
-      },
-    },
-  },
+export const auth = {
+  clientId: "21787c54-4ba3-4270-a273-adf60bc20601" /** App ID */,
+  authority: "https://login.microsoftonline.com/ed764e1f-b3b8-4aaf-8fb2-1d05be08443b",
+  redirectUri: window.location.href,
 };
-const loginScopes = { scopes: ["User.Read", "Mail.Read"] };
-const tokenScopes = {
-  scopes: ["User.Read", "Mail.Read"],
-  forceRefresh: false /* Set this to "true" to skip a cached token and go to the server to get a new token*/,
+
+export const cache = {
+  cacheLocation: "sessionStorage", // This configures where your cache will be stored
+  storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
 };
-export { msalConfig, loginScopes, tokenScopes };
+const apiID = "3ab086b7-33bf-4f5e-8c30-72fbdbc12c25"; /** API ClientID on-behalf-of */
+const apiScopes = `api://${apiID}/.default`;
+//const apiScopes = `api://${apiID}/.default`;
+/**
+ * Scopes you enter here will be consented once you authenticate. For a full list of available authentication parameters,
+ * visit https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md
+ */
+export const loginRequest = {
+  scopes: ["User.Read"],
+};
+
+// Add here scopes for access token to be used at the API endpoints.
+export const tokenRequest = {
+  scopes: [apiScopes],
+};
+
+// Add here scopes for silent token request
+export const silentRequest = {
+  scopes: ["User.Read", apiScopes],
+};

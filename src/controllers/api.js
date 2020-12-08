@@ -1,4 +1,5 @@
 import config from "../configs/mongodb";
+import store from "../store";
 
 const ENTRY_URL = config.MAILPY_API_URL + "/entry";
 const GROUP_URL = config.MAILPY_API_URL + "/group";
@@ -11,14 +12,31 @@ const CONDITIONS_URL = config.MAILPY_API_URL + "/conditions";
 const PROTECTED_URL = config.MAILPY_API_URL + "/protected";
 
 class Api {
-  constructor() {}
+  constructor() {
+    this.apiAccessToken = null;
+    this.accessToken = null;
 
-  async getProtected(identity) {
-    //idToken
-    //accessToken
-    const token = identity.idToken;
+    store.subscribe(() => {
+      // Update Tokens  from store
+      const { apiAccessToken, accessToken } = store.getState().auth;
+      this.apiAccessToken = apiAccessToken;
+      this.accessToken = accessToken;
+    });
+  }
+
+  promptRedirect(url) {
+    if (
+      window.confirm(
+        `The backend ${url} uses a self-signed SSL certificate and in order to proceede you must accept it. Click Ok to be redirected in order to accept the certificate.`
+      )
+    ) {
+      window.location.href = url;
+    }
+  }
+
+  async getProtected() {
     const headers = new Headers();
-    const bearer = `Bearer ${token}`;
+    const bearer = `Bearer ${this.apiAccessToken}`;
 
     headers.append("Authorization", bearer);
 
@@ -48,6 +66,13 @@ class Api {
       })
       .then((json) => {
         return json;
+      })
+      .catch((e) => {
+        console.error(
+          `Failed to fetch request error ${e}, the backend is either offline or the self signed certificate is not eccepted.`
+        );
+        this.promptRedirect(GROUPS_URL);
+        return [];
       });
     return data;
   }
@@ -62,6 +87,13 @@ class Api {
       })
       .then((json) => {
         return json;
+      })
+      .catch((e) => {
+        console.error(
+          `Failed to fetch request error ${e}, the backend is either offline or the self signed certificate is not eccepted.`
+        );
+        this.promptRedirect(GROUPS_URL);
+        return [];
       });
     return data;
   }
@@ -77,6 +109,13 @@ class Api {
       })
       .then((json) => {
         return json;
+      })
+      .catch((e) => {
+        console.error(
+          `Failed to fetch request error ${e}, the backend is either offline or the self signed certificate is not eccepted.`
+        );
+        this.promptRedirect(GROUPS_URL);
+        return [];
       });
     return data;
   }

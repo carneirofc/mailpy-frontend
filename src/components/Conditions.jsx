@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { DataGrid } from "@material-ui/data-grid";
 
@@ -9,30 +9,21 @@ const columns = [
   { field: "desc", headerName: "Description", width: 550 },
 ];
 
-class Conditions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      conditions: [],
-    };
-  }
+const Conditions = (props) => {
+  const [conditions, setConditions] = useState([]);
 
-  updateConditions = async () => {
+  const updateConditions = async () => {
     const conditions = await MailpyController.getConditions();
-    this.setState({ conditions: conditions });
+    setConditions(conditions);
   };
+  useEffect(() => {
+    updateConditions();
+  }, []);
 
-  componentDidMount() {
-    this.updateConditions();
-  }
-
-  render() {
-    const { conditions } = this.state;
-    return (
-      <div style={{ height: 600, width: "100%" }}>
-        <DataGrid rowHeight={30} rows={conditions} columns={columns} autoPageSize disableSelectionOnClick />
-      </div>
-    );
-  }
-}
+  return (
+    <div style={{ height: 600, width: "100%" }}>
+      <DataGrid rowHeight={30} rows={conditions} columns={columns} autoPageSize disableSelectionOnClick />
+    </div>
+  );
+};
 export default Conditions;
