@@ -26,5 +26,5 @@ export const tokenRequest = {
 
 // Add here scopes for silent token request
 export const silentRequest = {
-  scopes: ["User.Read", apiScopes],
+  scopes: [apiScopes],
 };

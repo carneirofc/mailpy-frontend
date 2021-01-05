@@ -32,7 +32,10 @@ export function signIn() {
       const identity = await authService.signIn();
       dispatch(authSignIn(identity));
 
-      const token = await authService.acquireToken(identity.account.username);
+      const token = await authService.acquireToken();
+
+      if (token === null) throw "Failed to acquire token";
+
       dispatch(authUpdateToken(token));
       dispatch(stopNetwork());
     } catch (error) {

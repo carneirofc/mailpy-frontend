@@ -81,14 +81,25 @@ class AuthService {
   };
 
   /** * Return a new ideentity with a token */
-  acquireToken = async (username) => {
+  acquireToken = async () => {
     /**
      * See here for more info on account retrieval:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
-    silentRequest.account = this.msalClient.getAccountByUsername(username);
-    return this.msalClient.acquireTokenSilent(silentRequest).catch((error) => {
-      console.warn("Silent token acquisition fails. acquiring token using interactive method");
+    //silentRequest.account = this.msalClient.getAccountByUsername(username);
+
+    return this.msalClient
+      .acquireTokenPopup({ ...tokenRequest, prompt: "consent" })
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((error) => {
+        console.error(error);
+        return null;
+      });
+    /*return this.msalClient.acquireTokenSilent(silentRequest).catch((error) => {
+      console.warn("Silent token acquisition fails. acquiring token using interactive method", error);
       if (error) {
         // fallback to interaction when silent call fails
         tokenRequest.account = this.msalClient.getAccountByUsername(username);
@@ -103,7 +114,7 @@ class AuthService {
       } else {
         console.warn(error);
       }
-    });
+    });*/
   };
 }
 

@@ -34,7 +34,26 @@ class Api {
     }
   }
 
+  async callResourceAPI(resourceURI) {
+    let options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "Accept-Charset": "utf-8",
+      },
+    };
+    console.log("Attempt to call Resource API");
+
+    let response = await fetch(resourceURI, options);
+    let json = await response.json();
+    return json;
+  }
+
   async getProtected() {
+    await this.callResourceAPI("https://graph.microsoft.com/v1.0/me");
+
     const headers = new Headers();
     const bearer = `Bearer ${this.apiAccessToken}`;
 
