@@ -1,4 +1,4 @@
-import config from "../configs/mongodb";
+import config from "../configs/api";
 import store from "../store";
 
 const ENTRY_URL = config.MAILPY_API_URL + "/entry";
