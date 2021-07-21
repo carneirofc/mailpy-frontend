@@ -1,27 +1,15 @@
 import config from "../configs/api";
 import store from "../store";
 
-const ENTRY_URL = config.MAILPY_API_URL + "/entry";
-const GROUP_URL = config.MAILPY_API_URL + "/group";
-const CONDITION_URL = config.MAILPY_API_URL + "/condition";
-
-const ENTRIES_URL = config.MAILPY_API_URL + "/entries";
-const GROUPS_URL = config.MAILPY_API_URL + "/groups";
-const CONDITIONS_URL = config.MAILPY_API_URL + "/conditions";
+const USER_URL = config.MAILPY_API_URL + "/user";
+const USER_INFO_URL = USER_URL + "/login";
 
 const PROTECTED_URL = config.MAILPY_API_URL + "/protected";
 
 class Api {
   constructor() {
-    this.apiAccessToken = null;
-    this.accessToken = null;
-
-    store.subscribe(() => {
-      // Update Tokens  from store
-      const { apiAccessToken, accessToken } = store.getState().auth;
-      this.apiAccessToken = apiAccessToken;
-      this.accessToken = accessToken;
-    });
+    this.getApiAccessToken = () => store.getState().auth.apiAccessToken;
+    this.getAccessToken = () => store.getState().auth.accessToken;
   }
 
   promptRedirect(url) {
@@ -35,10 +23,10 @@ class Api {
   }
 
   async callResourceAPI(resourceURI) {
-    let options = {
+    const options = {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${this.accessToken}`,
+        Authorization: `Bearer ${this.getAccessToken()}`,
         "Content-type": "application/json",
         Accept: "application/json",
         "Accept-Charset": "utf-8",
@@ -46,22 +34,34 @@ class Api {
     };
     console.log("Attempt to call Resource API");
 
-    let response = await fetch(resourceURI, options);
-    let json = await response.json();
-    return json;
+    return await fetch(resourceURI, options).then((res) => res.json());
+  }
+
+  getTokenHeaders() {
+    const headers = new Headers();
+    const bearer = `Bearer ${this.getApiAccessToken()}`;
+    headers.append("Authorization", bearer);
+    return headers;
+  }
+
+  /** Get Registered user information from the api */
+  async getUserInfo() {
+    const options = {
+      method: "GET",
+      headers: this.getTokenHeaders(),
+    };
+    const data = await fetch(USER_INFO_URL, options)
+      .then((data) => data.json())
+      .then((data) => data);
+    return data;
   }
 
   async getProtected() {
     await this.callResourceAPI("https://graph.microsoft.com/v1.0/me");
 
-    const headers = new Headers();
-    const bearer = `Bearer ${this.apiAccessToken}`;
-
-    headers.append("Authorization", bearer);
-
     const options = {
       method: "GET",
-      headers: headers,
+      headers: this.getTokenHeaders(),
     };
 
     const data = await fetch(PROTECTED_URL, options)
@@ -70,71 +70,6 @@ class Api {
       })
       .then((json) => {
         return json;
-      });
-    return data;
-  }
-
-  async getConditions(token) {
-    const options = {
-      method: "GET",
-    };
-
-    const data = await fetch(CONDITIONS_URL, options)
-      .then((data) => {
-        return data.json();
-      })
-      .then((json) => {
-        return json;
-      })
-      .catch((e) => {
-        console.error(
-          `Failed to fetch request error ${e}, the backend is either offline or the self signed certificate is not eccepted.`
-        );
-        this.promptRedirect(GROUPS_URL);
-        return [];
-      });
-    return data;
-  }
-
-  async getGroups() {
-    const options = {
-      method: "GET",
-    };
-    const data = await fetch(GROUPS_URL, options)
-      .then((data) => {
-        return data.json();
-      })
-      .then((json) => {
-        return json;
-      })
-      .catch((e) => {
-        console.error(
-          `Failed to fetch request error ${e}, the backend is either offline or the self signed certificate is not eccepted.`
-        );
-        this.promptRedirect(GROUPS_URL);
-        return [];
-      });
-    return data;
-  }
-
-  async getEntries() {
-    const options = {
-      method: "GET",
-    };
-
-    const data = await fetch(ENTRIES_URL, options)
-      .then((data) => {
-        return data.json();
-      })
-      .then((json) => {
-        return json;
-      })
-      .catch((e) => {
-        console.error(
-          `Failed to fetch request error ${e}, the backend is either offline or the self signed certificate is not eccepted.`
-        );
-        this.promptRedirect(GROUPS_URL);
-        return [];
       });
     return data;
   }
