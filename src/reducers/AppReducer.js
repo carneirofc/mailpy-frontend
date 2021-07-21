@@ -11,10 +11,17 @@ const initialState = {
     idToken: null,
     apiAccessToken: null,
   },
+  api: {
+    user: null,
+    groups: null,
+    entries: null,
+    conditions: null,
+  },
 };
 
-export default function (state = initialState, action) {
+const appReducer = function (state = initialState, action) {
   switch (action.type) {
+    /** Pending network requests */
     case Actions.NETWORK_ERROR:
       return { ...state, lastError: action.error };
     case Actions.NETWORK_START:
@@ -22,6 +29,7 @@ export default function (state = initialState, action) {
     case Actions.NETWORK_STOP:
       return { ...state, networkRequests: state.networkRequests - 1 };
 
+    /** Azure Identity */
     case Actions.SIGN_IN:
       const {
         accessToken,
@@ -33,7 +41,13 @@ export default function (state = initialState, action) {
       return { ...state, identity: null, auth: {} };
     case Actions.UPDATE_TOKEN:
       return { ...state, auth: { ...state.auth, apiAccessToken: action.accessToken } };
+
+    /** Mailpy API data */
+    case Actions.API_USER_INFO:
+      return { ...state, api: { ...state.api, user: action.user } };
+
     default:
       return state;
   }
-}
+};
+export default appReducer;

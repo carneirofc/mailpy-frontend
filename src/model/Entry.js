@@ -1,18 +1,7 @@
-class Entry {
+export class Entry {
   constructor(props) {
-    const {
-      _id,
-      pvname,
-      unit,
-      condition,
-      alarm_values,
-      emails,
-      email_timeout,
-      subject,
-      group,
-      warning_message,
-    } = props;
-    this.id = _id;
+    const { id, pvname, unit, condition, alarm_values, emails, email_timeout, subject, group, warning_message } = props;
+    this.id = id;
     this.pvname = pvname;
     this.unit = unit;
     this.condition = condition;
@@ -24,4 +13,3 @@ class Entry {
     this.warningMessage = warning_message;
   }
 }
-export default Entry;
