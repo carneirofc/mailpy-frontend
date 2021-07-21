@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import Entries from "./Entries";
 import Entry from "./Entry";
 import Groups from "./Groups";
+import Group from "./Group";
 import Conditions from "./Conditions";
 import Home from "./Home";
 
@@ -19,6 +20,7 @@ function Content(props) {
         <Route path="/entries" component={Entries} />
         <Route path="/entry" component={Entry} />
         <Route path="/groups" component={Groups} />
+        <Route path="/group" component={Group} />
         <Route path="/conditions" component={Conditions} />
         <Route path="*">
           <Redirect to="/" />

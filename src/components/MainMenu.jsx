@@ -23,7 +23,6 @@ const MainMenu = (props) => {
     return [
       { name: "Home", target: "/home" },
       { name: "Entries", target: "/entries" },
-      { name: "Entry", target: "/entry" },
       { name: "Groups", target: "/groups" },
       { name: "Conditions", target: "/conditions" },
     ].map((e) => (

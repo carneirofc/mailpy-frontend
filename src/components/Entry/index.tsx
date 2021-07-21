@@ -8,23 +8,24 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  ListSubheader,
 } from "@material-ui/core";
 
 import { Delete, Add } from "@material-ui/icons";
+import { StaticContext } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
+
+import { ConditionName, Group } from "common";
 import { useStyles } from "./styles";
 import ValueInput from "./ValueInput";
-
 import MailpyController from "../../controllers/mailpy";
-import { ConditionName, Entry, Group } from "common";
 
-interface EntryComponentProps {
-  id?: string;
-}
 const ConditionNameOptions: string[] = Object.values(ConditionName);
-
-const EntryComponent: FunctionComponent<EntryComponentProps> = (props) => {
+export type EntryLocation = { id?: string };
+const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, EntryLocation>> = (props) => {
   const classes = useStyles();
+
+  const { id } = props.location.state;
+
   const [alarmValue, setAlarmValue] = useState<string>("");
   const [condition, setCondition] = useState<ConditionName>(ConditionName.SUPERIOR_THAN);
   const [pvname, setPvname] = useState<string>("");
@@ -72,7 +73,7 @@ const EntryComponent: FunctionComponent<EntryComponentProps> = (props) => {
   return (
     <form noValidate autoComplete="off" className={classes.root}>
       <div>
-        <h3>ID: {props.id ? props.id : "new entry"}</h3>
+        <h3>ID: {id ? id : "new entry"}</h3>
       </div>
       <div>
         <TextField
