@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import Entries from "./Entries";
+import Entry from "./Entry";
 import Groups from "./Groups";
 import Conditions from "./Conditions";
 import Home from "./Home";
@@ -16,6 +17,7 @@ function Content(props) {
       <Switch>
         <Route exact path="/" component={Home}></Route>
         <Route path="/entries" component={Entries} />
+        <Route path="/entry" component={Entry} />
         <Route path="/groups" component={Groups} />
         <Route path="/conditions" component={Conditions} />
         <Route path="*">
