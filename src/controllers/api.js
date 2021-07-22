@@ -1,5 +1,5 @@
 import config from "../configs/api";
-import store from "../store";
+import store from "../app/store";
 
 const USER_URL = config.MAILPY_API_URL + "/user";
 const USER_INFO_URL = USER_URL + "/login";

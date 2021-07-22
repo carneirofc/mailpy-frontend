@@ -1,15 +1,8 @@
-import React from "react";
-
 import { makeStyles } from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
-
-import Header from "./Header";
-import MainMenu from "./MainMenu";
-import Content from "./Content";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
@@ -31,17 +24,3 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
-
-function App() {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <Header classes={classes} />
-      <MainMenu classes={classes} />
-      <Content classes={classes} />
-    </div>
-  );
-}
-export default App;
-export { useStyles };

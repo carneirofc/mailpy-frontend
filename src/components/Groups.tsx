@@ -7,8 +7,7 @@ import { IconButton } from "@material-ui/core";
 
 import MailpyController from "../controllers/mailpy";
 import { GroupLocationState } from "./Group";
-import { Add } from "@material-ui/icons";
-
+import { AddIconButtonLink } from "./Link";
 const columns: GridColumns = [
   { field: "id", headerName: "ID", sortable: false, flex: 1 },
   { field: "name", headerName: "Name", flex: 1 },
@@ -18,7 +17,6 @@ const columns: GridColumns = [
 
 const Groups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  const [addGroup, setAddGroup] = useState<boolean>(false);
   const addGroupLocation: LocationDescriptor<GroupLocationState> = { pathname: "/group", state: { id: undefined } };
   const updateGroups = async () => {
     const data = await MailpyController.getGroups();
@@ -31,10 +29,7 @@ const Groups = () => {
 
   return (
     <>
-      {addGroup ? <Redirect to={addGroupLocation} /> : null}
-      <IconButton color={"primary"} onClick={() => setAddGroup(true)}>
-        <Add />
-      </IconButton>
+      <AddIconButtonLink to={addGroupLocation} />
       <div style={{ height: 600, width: "100%" }}>
         <DataGrid rowHeight={30} rows={groups} columns={columns} autoPageSize disableSelectionOnClick />
       </div>

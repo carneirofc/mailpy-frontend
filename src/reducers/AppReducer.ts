@@ -1,4 +1,5 @@
-import Actions from "../actions/Actions";
+import { AnyAction } from "redux";
+import * as Actions from "../actions/symbols";
 
 const initialState = {
   networkRequests: 0,
@@ -6,10 +7,10 @@ const initialState = {
   lastError: null,
   auth: {
     accessToken: null,
+    apiAccessToken: null,
+    idToken: null,
     name: null,
     username: null,
-    idToken: null,
-    apiAccessToken: null,
   },
   api: {
     user: null,
@@ -19,7 +20,7 @@ const initialState = {
   },
 };
 
-const appReducer = function (state = initialState, action) {
+const appReducer = function (state = initialState, action: AnyAction) {
   switch (action.type) {
     /** Pending network requests */
     case Actions.NETWORK_ERROR:
@@ -36,9 +37,23 @@ const appReducer = function (state = initialState, action) {
         idToken,
         account: { name, username },
       } = action.identity;
-      return { ...state, identity: action.identity, auth: { name, username, accessToken, idToken } };
+      return {
+        ...state,
+        identity: action.identity,
+        auth: { ...state.auth, name, username, accessToken, idToken },
+      };
     case Actions.SIGN_OUT:
-      return { ...state, identity: null, auth: {} };
+      return {
+        ...state,
+        identity: null,
+        auth: {
+          accessToken: null,
+          apiAccessToken: null,
+          idToken: null,
+          name: null,
+          username: null,
+        },
+      };
     case Actions.UPDATE_TOKEN:
       return { ...state, auth: { ...state.auth, apiAccessToken: action.accessToken } };
 

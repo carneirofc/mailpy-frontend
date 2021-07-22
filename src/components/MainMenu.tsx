@@ -1,20 +1,14 @@
-import React from "react";
-
-import { Link } from "react-router-dom";
-
 import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import { Drawer, Divider, List, ListItem, ListItemText } from "@material-ui/core";
+
 import SignInButton from "./SignInButton";
+import { ListItemLink } from "./Link";
+import { RootState } from "../app/store";
+import { useStyles } from "./App";
 
-const MainMenu = (props) => {
-  const { classes } = props;
-
-  const auth = useSelector((state) => state.auth);
+function MainMenu() {
+  const auth = useSelector((state: RootState) => state.auth);
+  const classes = useStyles();
 
   const name = auth.name ? auth.name : "disconnected";
   const email = auth.username ? auth.username : "please login";
@@ -25,13 +19,7 @@ const MainMenu = (props) => {
       { name: "Entries", target: "/entries" },
       { name: "Groups", target: "/groups" },
       { name: "Conditions", target: "/conditions" },
-    ].map((e) => (
-      <Link style={{ textDecoration: "none" }} to={e.target} key={e.name}>
-        <ListItem variant="outlined" color="primary" button key={e.name}>
-          <ListItemText primary={e.name} style={{ textAlign: "center" }} />
-        </ListItem>
-      </Link>
-    ));
+    ].map(({ name, target }, idx) => <ListItemLink primary={name} to={target} key={`${idx}`} />);
   };
 
   return (
@@ -55,9 +43,5 @@ const MainMenu = (props) => {
       </List>
     </Drawer>
   );
-};
-MainMenu.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
+}
 export default MainMenu;

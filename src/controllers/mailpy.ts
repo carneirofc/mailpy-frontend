@@ -1,9 +1,17 @@
 import { api } from "../data-access";
 import { Condition, Group, Entry } from "common";
 
+import store from "../app/store";
+import { startNetwork, stopNetwork } from "../actions";
+
 class MailpyController {
   async getEntries(): Promise<Entry[]> {
-    return await api.getEntries();
+    store.dispatch(startNetwork());
+    try {
+      return await api.getEntries();
+    } finally {
+      store.dispatch(stopNetwork());
+    }
   }
 
   async getEntry(id: string): Promise<Entry> {

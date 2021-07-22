@@ -1,9 +1,8 @@
-import React from "react";
-
 import Typography from "@material-ui/core/Typography";
 import ButtonProtected from "./ButtonProtected";
-
+import { useAppSelector } from "../app/hooks";
 function Home() {
+  const netRequests = useAppSelector((state) => state.networkRequests);
   return (
     <>
       <Typography paragraph>
@@ -11,6 +10,17 @@ function Home() {
         with a warning message if the based on the specified condition.
       </Typography>
       <ButtonProtected />
+      <div style={{ margin: "15rem" }}>
+        <h2>Application Debug</h2>
+        <table>
+          <tr>
+            <th>Pending Network Requests</th>
+          </tr>
+          <tr>
+            <td>{netRequests}</td>
+          </tr>
+        </table>
+      </div>
     </>
   );
 }

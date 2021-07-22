@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
 
-const Header = ({ classes }) => {
+import { useStyles } from "./App";
+
+const Header = () => {
+  const classes = useStyles();
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
@@ -16,8 +16,5 @@ const Header = ({ classes }) => {
       </Toolbar>
     </AppBar>
   );
-};
-Header.propTypes = {
-  classes: PropTypes.object.isRequired,
 };
 export default Header;
