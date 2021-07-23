@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
 import { DataGrid, GridColumns } from "@material-ui/data-grid";
 
-import { Entry } from "mailpy-common";
-import MailpyController from "../controllers/mailpy";
+import { useAppSelector } from "../../app/hooks";
 
 const columns: GridColumns = [
   { field: "pvname", headerName: "PV Name", width: 260 },
@@ -17,15 +15,7 @@ const columns: GridColumns = [
 ];
 
 const EntriesTable = () => {
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const updateEntries = async () => {
-    const res = await MailpyController.getEntries();
-    setEntries(res);
-  };
-  useEffect(() => {
-    updateEntries();
-  }, []);
-
+  const entries = useAppSelector((props) => props.mailpy.entries);
   return (
     <div style={{ height: 600, width: "100%" }}>
       <DataGrid rowHeight={30} rows={entries} columns={columns} autoPageSize disableSelectionOnClick />

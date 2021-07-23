@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
 import { Drawer, Divider, List, ListItem, ListItemText } from "@material-ui/core";
+import { useAppSelector } from "../app/hooks";
 
 import SignInButton from "./SignInButton";
 import { ListItemLink } from "./Link";
@@ -7,7 +7,7 @@ import { RootState } from "../app/store";
 import { useStyles } from "./App";
 
 function MainMenu() {
-  const auth = useSelector((state: RootState) => state.auth);
+  const auth = useAppSelector((state: RootState) => state.appReducer.auth);
   const classes = useStyles();
 
   const name = auth.name ? auth.name : "disconnected";

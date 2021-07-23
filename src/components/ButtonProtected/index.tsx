@@ -4,7 +4,7 @@ import { RootState } from "../../app/store";
 import api from "../../controllers/api";
 
 const ButtonProtect = () => {
-  const identity = useSelector((state: RootState) => state.identity);
+  const identity = useSelector((state: RootState) => state.appReducer.identity);
   const text = identity ? "Call Test API" : "Please Login";
   const disabled = identity ? false : true;
   const onClickHandler = async () => {

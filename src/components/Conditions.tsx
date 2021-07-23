@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
-
-import { Condition } from "mailpy-common";
-import MailpyController from "../controllers/mailpy";
+import { useEffect } from "react";
 import { DataGrid, GridColumns } from "@material-ui/data-grid";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchConditions } from "../actions/mailpy";
+import { IconButton } from "@material-ui/core";
+import { Refresh } from "@material-ui/icons";
 
 const columns: GridColumns = [
   { field: "id", headerName: "ID", sortable: false, flex: 1 },
@@ -11,20 +12,21 @@ const columns: GridColumns = [
 ];
 
 const Conditions = () => {
-  const [conditions, setConditions] = useState<Condition[]>([]);
-
-  const updateConditions = async () => {
-    const conditions = await MailpyController.getConditions();
-    setConditions(conditions);
-  };
+  const conditions = useAppSelector((state) => state.mailpy.conditions);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    updateConditions();
+    dispatch(fetchConditions());
   }, []);
 
   return (
-    <div style={{ height: 600, width: "100%" }}>
-      <DataGrid rowHeight={30} rows={conditions} columns={columns} autoPageSize disableSelectionOnClick />
-    </div>
+    <>
+      <IconButton color="primary" onClick={() => dispatch(fetchConditions())}>
+        <Refresh />
+      </IconButton>
+      <div style={{ height: 600, width: "100%" }}>
+        <DataGrid rowHeight={30} rows={conditions} columns={columns} autoPageSize disableSelectionOnClick />
+      </div>
+    </>
   );
 };
 export default Conditions;

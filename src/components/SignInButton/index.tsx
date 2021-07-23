@@ -7,7 +7,7 @@ import { useStyles } from "./styles";
 
 const SignInButton = ({ ...props }) => {
   const { green, red } = useStyles(props);
-  const identity = useAppSelector((state) => state.identity);
+  const identity = useAppSelector((state) => state.appReducer.identity);
   const buttonText = identity ? "Sign Out" : "Sign In";
   const buttonStyle = identity ? red : green;
   const dispatch = useAppDispatch();

@@ -2,7 +2,7 @@ import Typography from "@material-ui/core/Typography";
 import ButtonProtected from "./ButtonProtected";
 import { useAppSelector } from "../app/hooks";
 function Home() {
-  const netRequests = useAppSelector((state) => state.networkRequests);
+  const netRequests = useAppSelector((state) => state.appReducer.networkRequests);
   return (
     <>
       <Typography paragraph>
