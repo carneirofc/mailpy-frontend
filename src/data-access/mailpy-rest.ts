@@ -2,7 +2,7 @@ import axios from "axios";
 import https from "https";
 
 import { MailpyApi } from "./interface";
-import { Condition, ConditionName, Entry, Group, makeCondition, makeEntry, makeGroup } from "common";
+import { Condition, ConditionName, Entry, Group, makeCondition, makeEntry, makeGroup } from "mailpy-common";
 
 export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/api"): MailpyApi {
   // At instance level
@@ -58,32 +58,42 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
       const res = await axiosInstance.get<ConditionJson[]>(Endpoints.GET_CONDITIONS);
       return res.data.map((_json) => makeCondition(_json.name, _json.desc, _json.id));
     }
+
     async getEntries(): Promise<Entry[]> {
       const res = await axiosInstance.get<EntryJson[]>(Endpoints.GET_ENTRIES);
       return res.data.map((_json) => makeEntry(_json));
     }
+
     async getEntry(id: string): Promise<Entry> {
       throw new Error("Method not implemented.");
     }
+
     async getGroups(): Promise<Group[]> {
       const res = await axiosInstance.get<GroupJson[]>(Endpoints.GET_GROUPS);
       return res.data.map((_json) => makeGroup(_json));
     }
+
     async getGroup(id: string): Promise<Group> {
       const res = await axiosInstance.get<GroupJson>(Endpoints.GET_GROUP, { params: { id } });
       return makeGroup(res.data);
     }
+
     patchEntry(entry: Entry): Promise<Entry> {
       throw new Error("Method not implemented.");
     }
-    patchGroup(group: Group): Promise<Group> {
-      throw new Error("Method not implemented.");
+
+    async patchGroup(group: Group): Promise<Group> {
+      const res = await axiosInstance.patch<GroupJson>(Endpoints.POST_GROUP, { ...group });
+      return makeGroup(res.data);
     }
+
     postEntry(entry: Entry): Promise<Entry> {
       throw new Error("Method not implemented.");
     }
-    prostGroup(group: Group): Promise<Group> {
-      throw new Error("Method not implemented.");
+
+    async postGroup(group: Group): Promise<Group> {
+      const res = await axiosInstance.post<GroupJson>(Endpoints.POST_GROUP, { ...group });
+      return makeGroup(res.data);
     }
   }
   return new MailpyApiImpl();

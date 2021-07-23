@@ -1,4 +1,4 @@
-import { Condition, Entry, Group } from "common";
+import { Condition, Entry, Group } from "mailpy-common";
 export interface MailpyApi {
   getConditions(): Promise<Condition[]>;
   getEntries(): Promise<Entry[]>;
@@ -10,5 +10,5 @@ export interface MailpyApi {
   patchGroup(group: Group): Promise<Group>;
 
   postEntry(entry: Entry): Promise<Entry>;
-  prostGroup(group: Group): Promise<Group>;
+  postGroup(group: Group): Promise<Group>;
 }

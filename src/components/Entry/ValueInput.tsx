@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { TextField } from "@material-ui/core";
-import { ConditionName, isAlarmValueValid } from "common";
+import { ConditionName, isAlarmValueValid } from "mailpy-common";
 
 import { useStyles } from "./styles";
 

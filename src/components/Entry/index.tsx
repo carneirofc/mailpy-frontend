@@ -13,8 +13,7 @@ import {
 import { Delete, Add } from "@material-ui/icons";
 import { StaticContext } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
-
-import { ConditionName, Group } from "common";
+import { ConditionName, Group } from "mailpy-common";
 import { useStyles } from "./styles";
 import ValueInput from "./ValueInput";
 import MailpyController from "../../controllers/mailpy";
@@ -170,12 +169,7 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
             <ListItem key={`${idx}-${item}`}>
               <ListItemText primary={item} />
               <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  onClick={() => {
-                    deleteEmail(emails[idx]);
-                  }}
-                >
+                <IconButton edge="end" onClick={() => deleteEmail(emails[idx])}>
                   <Delete />
                 </IconButton>
               </ListItemSecondaryAction>

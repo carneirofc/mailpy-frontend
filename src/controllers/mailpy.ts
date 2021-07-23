@@ -1,5 +1,5 @@
 import { api } from "../data-access";
-import { Condition, Group, Entry } from "common";
+import { Condition, Group, Entry } from "mailpy-common";
 
 import store from "../app/store";
 import { startNetwork, stopNetwork } from "../actions";
@@ -15,24 +15,59 @@ class MailpyController {
   }
 
   async getEntry(id: string): Promise<Entry> {
-    return await api.getEntry(id);
+    store.dispatch(startNetwork());
+    try {
+      return await api.getEntry(id);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
   }
 
   async getGroup(id: string): Promise<Group> {
-    return await api.getGroup(id);
+    store.dispatch(startNetwork());
+    try {
+      return await api.getGroup(id);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
   }
+
   async getGroups(): Promise<Group[]> {
-    return await api.getGroups();
+    store.dispatch(startNetwork());
+    try {
+      return await api.getGroups();
+    } finally {
+      store.dispatch(stopNetwork());
+    }
   }
 
   async deleteGroup(group: Group) {}
 
-  async insertGroup(group: Group) {}
+  async insertGroup(group: Group): Promise<Group> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.postGroup(group);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
 
-  async updateGroup(group: Group) {}
+  async updateGroup(group: Group): Promise<Group> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.patchGroup(group);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
 
   async getConditions(): Promise<Condition[]> {
-    return await api.getConditions();
+    store.dispatch(startNetwork());
+    try {
+      return await api.getConditions();
+    } finally {
+      store.dispatch(stopNetwork());
+    }
   }
 }
 

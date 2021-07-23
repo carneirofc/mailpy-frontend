@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Condition } from "common";
+import { Condition } from "mailpy-common";
 import MailpyController from "../controllers/mailpy";
 import { DataGrid, GridColumns } from "@material-ui/data-grid";
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { DataGrid, GridColumns } from "@material-ui/data-grid";
 
-import { Entry } from "common";
+import { Entry } from "mailpy-common";
 import MailpyController from "../controllers/mailpy";
 
 const columns: GridColumns = [

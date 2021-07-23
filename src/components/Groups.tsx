@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { DataGrid, GridColumns } from "@material-ui/data-grid";
 import { LocationDescriptor } from "history";
-import { Redirect } from "react-router";
-import { Group } from "common";
-import { IconButton } from "@material-ui/core";
+import { Group } from "mailpy-common";
 
 import MailpyController from "../controllers/mailpy";
 import { GroupLocationState } from "./Group";
