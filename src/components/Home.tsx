@@ -13,12 +13,16 @@ function Home() {
       <div style={{ margin: "15rem" }}>
         <h2>Application Debug</h2>
         <table>
-          <tr>
-            <th>Pending Network Requests</th>
-          </tr>
-          <tr>
-            <td>{netRequests}</td>
-          </tr>
+          <thead>
+            <tr>
+              <th>Pending Network Requests</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{netRequests}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </>

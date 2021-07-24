@@ -6,9 +6,9 @@ import { IconButton } from "@material-ui/core";
 import { Refresh } from "@material-ui/icons";
 
 const columns: GridColumns = [
-  { field: "id", headerName: "ID", sortable: false, flex: 1 },
-  { field: "name", headerName: "Name", flex: 2 },
-  { field: "desc", headerName: "Description", flex: 3 },
+  { field: "id", headerName: "ID", sortable: false, flex: 1, disableColumnMenu: true },
+  { field: "name", headerName: "Name", flex: 2, disableColumnMenu: true },
+  { field: "desc", headerName: "Description", flex: 3, disableColumnMenu: true },
 ];
 
 const Conditions = () => {
@@ -24,7 +24,7 @@ const Conditions = () => {
         <Refresh />
       </IconButton>
       <div style={{ height: 600, width: "100%" }}>
-        <DataGrid rowHeight={30} rows={conditions} columns={columns} autoPageSize disableSelectionOnClick />
+        <DataGrid rows={conditions} columns={columns} autoPageSize disableSelectionOnClick />
       </div>
     </>
   );

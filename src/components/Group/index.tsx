@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useState, useEffect } from "react";
 import { RouteComponentProps, StaticContext } from "react-router";
 import { TextField, Checkbox, FormControlLabel, FormControl, Button } from "@material-ui/core";
 import { useStyles } from "./styles";
@@ -12,11 +12,27 @@ const GroupComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, G
   const [desc, setDesc] = useState("");
   const [enabled, setEnabled] = useState(true);
 
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      MailpyController.getGroup(id)
+        .then(({ name, id, desc, enabled }) => {
+          setName(name);
+          setId(id);
+          setEnabled(enabled);
+          setDesc(desc);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [id]);
+
   const isNameValid: boolean = name?.trim().length !== 0;
   const isDescValid: boolean = desc?.trim().length !== 0;
   const isValid: boolean = isNameValid && isDescValid;
-
-  const [loading, setLoading] = useState(false);
 
   const handleInsert = async () => {
     setLoading(true);
