@@ -1,6 +1,7 @@
 import { FunctionComponent, useState, useEffect } from "react";
 import { RouteComponentProps, StaticContext } from "react-router";
 import { TextField, Checkbox, FormControlLabel, FormControl, Button } from "@material-ui/core";
+import { Delete, Update, Create } from "@material-ui/icons";
 import { useStyles } from "./styles";
 import MailpyController from "../../controllers/mailpy";
 
@@ -97,8 +98,14 @@ const GroupComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, G
           />
         </FormControl>
       </form>
-      <Button disabled={!isValid} variant="outlined" className={classes.button} onClick={handleConfirm}>
-        {id ? "Update" : "Create"}
+      <Button color="primary" disabled={!isValid} variant="outlined" className={classes.button} onClick={handleConfirm}>
+        <span style={{ margin: "0 0.3rem 0 0" }}>{id ? "Update" : "Create"}</span>
+        {id ? <Update /> : <Create />}
+      </Button>
+
+      <Button variant="outlined" color="secondary">
+        <span style={{ margin: "0 0.3rem 0 0" }}>Delete</span>
+        <Delete />
       </Button>
     </div>
   );

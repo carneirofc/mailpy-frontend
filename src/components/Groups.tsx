@@ -27,9 +27,6 @@ const columns: GridColumns = [
       return (
         <span>
           <IconButtonLink color="primary" icon={<Edit />} to={editGroupLocation} />
-          <IconButton color="secondary">
-            <Delete />
-          </IconButton>
         </span>
       );
     },
