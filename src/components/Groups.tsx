@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { IconButton } from "@material-ui/core";
-import { Refresh, Edit, Delete } from "@material-ui/icons";
+import { Refresh, Edit } from "@material-ui/icons";
 import { DataGrid, GridColumns } from "@material-ui/data-grid";
 import { LocationDescriptor } from "history";
 

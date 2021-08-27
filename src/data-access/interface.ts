@@ -11,4 +11,8 @@ export interface MailpyApi {
 
   postEntry(entry: Entry): Promise<Entry>;
   postGroup(group: Group): Promise<Group>;
+
+  deleteEntry(id: string): Promise<boolean>;
+  deleteGroup(id: string): Promise<boolean>;
 }
+export interface MSAzureApi {}

@@ -17,6 +17,7 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
     GET_GROUPS: `${endpoint}/groups`,
     PATCH_GROUP: `${endpoint}/group`,
     POST_GROUP: `${endpoint}/group`,
+    DELETE_GROUP: `${endpoint}/group`,
 
     GET_CONDITIONS: `${endpoint}/conditions`,
   };
@@ -54,6 +55,16 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
   }
 
   class MailpyApiImpl implements MailpyApi {
+    async deleteEntry(id: string): Promise<boolean> {
+      const res = await axiosInstance.delete(Endpoints.DELETE_ENTRY, { data: { id } });
+      return res.status === 200;
+    }
+
+    async deleteGroup(id: string): Promise<boolean> {
+      const res = await axiosInstance.delete(Endpoints.DELETE_GROUP, { data: { id } });
+      return res.status === 200;
+    }
+
     async getConditions(): Promise<Condition[]> {
       const res = await axiosInstance.get<ConditionJson[]>(Endpoints.GET_CONDITIONS);
       return res.data.map((_json) => makeCondition(_json.name, _json.desc, _json.id));

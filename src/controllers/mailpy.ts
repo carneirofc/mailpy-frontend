@@ -41,7 +41,14 @@ class MailpyController {
     }
   }
 
-  async deleteGroup(group: Group) {}
+  async deleteGroup(id: string): Promise<boolean> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.deleteGroup(id);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
 
   async insertGroup(group: Group): Promise<Group> {
     store.dispatch(startNetwork());

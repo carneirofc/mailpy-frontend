@@ -1,33 +1,35 @@
 import { FunctionComponent, useState, useEffect } from "react";
 import { RouteComponentProps, StaticContext } from "react-router";
 import { TextField, Checkbox, FormControlLabel, FormControl, Button } from "@material-ui/core";
-import { Delete, Update, Create } from "@material-ui/icons";
+import { Update, Create } from "@material-ui/icons";
 import { useStyles } from "./styles";
 import MailpyController from "../../controllers/mailpy";
+import AlertDialogButton from "../AlertDialogButton";
 
 export type GroupLocationState = { id?: string };
-const GroupComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, GroupLocationState>> = (props) => {
+export type GroupComponentT = FunctionComponent<RouteComponentProps<{}, StaticContext, GroupLocationState>>;
+const GroupComponent: GroupComponentT = (props) => {
   const classes = useStyles();
   const [id, setId] = useState(props.location.state.id);
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [enabled, setEnabled] = useState(true);
-
   const [loading, setLoading] = useState(false);
+
+  type gParam = { desc: string; enabled: boolean; id?: string; name: string };
+  const updateGroup = ({ desc, enabled, id, name }: gParam) => {
+    setId(id);
+    setDesc(desc);
+    setEnabled(enabled);
+    setName(name);
+  };
 
   useEffect(() => {
     if (id) {
       setLoading(true);
       MailpyController.getGroup(id)
-        .then(({ name, id, desc, enabled }) => {
-          setName(name);
-          setId(id);
-          setEnabled(enabled);
-          setDesc(desc);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+        .then((group) => updateGroup(group))
+        .finally(() => setLoading(false));
     }
   }, [id]);
 
@@ -38,32 +40,24 @@ const GroupComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, G
   const handleInsert = async () => {
     setLoading(true);
     await MailpyController.insertGroup({ desc, enabled, name })
-      .then(({ name, id, desc, enabled }) => {
-        setName(name);
-        setId(id);
-        setEnabled(enabled);
-        setDesc(desc);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then((group) => updateGroup(group))
+      .finally(() => setLoading(false));
   };
+
   const handleUpdate = async () => {
     setLoading(true);
     await MailpyController.updateGroup({ desc, enabled, name, id })
-      .then(({ name, id, desc, enabled }) => {
-        setName(name);
-        setId(id);
-        setEnabled(enabled);
-        setDesc(desc);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then((group) => updateGroup(group))
+      .finally(() => setLoading(false));
   };
+
   const handleConfirm = async () => {
     if (loading) return;
     id ? handleUpdate() : handleInsert();
+  };
+
+  const handleDelete = async () => {
+    if (id) await MailpyController.deleteGroup(id);
   };
 
   return (
@@ -103,10 +97,12 @@ const GroupComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, G
         {id ? <Update /> : <Create />}
       </Button>
 
-      <Button variant="outlined" color="secondary">
-        <span style={{ margin: "0 0.3rem 0 0" }}>Delete</span>
-        <Delete />
-      </Button>
+      <AlertDialogButton
+        enabled={id !== null && id !== undefined}
+        handleOk={async () => await handleDelete()}
+        title="Alarm group delete"
+        contentText={`Confirm the alarm group "${name}" id "${id}" deletion?"`}
+      />
     </div>
   );
 };
