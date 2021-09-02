@@ -5,28 +5,59 @@ import { Update, Create } from "@material-ui/icons";
 import { StaticContext } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
 import { ConditionName, isAlarmValueValid, Group } from "mailpy-common";
-
+import { Entry } from "mailpy-common";
 import { useStyles } from "./styles";
 import Inputs from "./Inputs";
 import MailpyController from "../../controllers/mailpy";
 import AlertDialogButton from "../AlertDialogButton";
 
-export type EntryLocation = { id?: string };
-const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, EntryLocation>> = (props) => {
+export type EntryLocationState = { id?: string };
+const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, EntryLocationState>> = (props) => {
   const classes = useStyles();
 
-  const { id } = props.location.state;
-
+  const [id, setId] = useState(props.location.state.id);
   const [alarmValue, setAlarmValue] = useState<string>("");
   const [condition, setCondition] = useState<ConditionName>(ConditionName.SUPERIOR_THAN);
   const [pvname, setPvname] = useState<string>("");
   const [subject, setSubject] = useState<string>("");
   const [unit, setUnit] = useState<string>("");
   const [warningMessage, setWarningMessage] = useState<string>("");
-
+  const [group, setGroup] = useState<Group>();
+  const [groups, setGroups] = useState<Group[]>();
   const [emailNew, setEmailNew] = useState<string>("");
   const [emailTimeout, setEmailTimeout] = useState<number>(1600);
   const [emails, setEmails] = useState<string[]>([]);
+
+  function updateEntryState(e: Entry) {
+    setId(e.id);
+    setAlarmValue(e.alarm_values);
+    setCondition(e.condition.name);
+    setPvname(e.pvname);
+    setSubject(e.subject);
+    setUnit(e.unit);
+    setWarningMessage(e.warning_message);
+    setGroup(e.group);
+    setEmails(e.emails);
+    setEmailTimeout(e.email_timeout);
+  }
+
+  const loadGroups = async () => {
+    const _groups = await MailpyController.getGroups();
+    setGroups(_groups);
+  };
+
+  const loadEntry = async () => {
+    if (!id) return;
+    updateEntryState(await MailpyController.getEntry(id));
+  };
+
+  useEffect(() => {
+    loadEntry();
+  }, [id]);
+
+  useEffect(() => {
+    loadGroups();
+  }, []);
 
   const setEmailTimeoutHandler = (value: string) => {
     const num: number = Number(value);
@@ -44,9 +75,6 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
 
   const deleteEmail = (email: string) => setEmails(emails.filter((value) => email !== value.replace(/\s+/g, "")));
 
-  const [group, setGroup] = useState<Group>();
-  const [groups, setGroups] = useState<Group[]>();
-
   const setGroupHandler = (name: string) => {
     groups?.forEach((g) => {
       if (g.name === name) {
@@ -54,15 +82,6 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
       }
     });
   };
-
-  const loadGroup = async () => {
-    const _groups = await MailpyController.getGroups();
-    setGroups(_groups);
-  };
-
-  useEffect(() => {
-    loadGroup();
-  }, []);
 
   let isValid: boolean = false;
   try {
@@ -79,8 +98,58 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
   } catch {
     isValid = false;
   }
+  const handleConfirm = async () => {
+    if (!group) {
+      console.warn(`Invalid group ${group}`);
+      return;
+    }
 
-  // const handleConfirm =
+    if (!id) {
+      MailpyController.insertEntry({
+        alarm_values: alarmValue,
+        condition_name: condition,
+        email_timeout: emailTimeout,
+        emails,
+        group_id: group.id as string,
+        pvname,
+        subject,
+        unit,
+        warning_message: warningMessage,
+      }).then((newEntry) => {
+        setId(newEntry.id);
+        alert(`New entry created: ${newEntry}`);
+      });
+      return;
+    }
+
+    MailpyController.updateEntry({
+      id,
+      alarm_values: alarmValue,
+      condition_name: condition,
+      email_timeout: emailTimeout,
+      emails,
+      group_id: group.id as string,
+      pvname,
+      subject,
+      unit,
+      warning_message: warningMessage,
+    }).then((updatedEntry) => {
+      alert(`Entry ${id} updated: ${updatedEntry}`);
+    });
+  };
+
+  const handleDelete = async () => {
+    if (!id) return;
+    MailpyController.deleteEntry(id)
+      .then((status) => {
+        alert(`Entry ${id} deleted ${status}`);
+      })
+      .catch((e) => {
+        const msg = `Failed to delete entry ${id}: error ${e}`;
+        console.error(msg, e);
+        alert(msg);
+      });
+  };
 
   return (
     <form noValidate autoComplete="off" className={classes.root}>
@@ -117,7 +186,7 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
           disabled={!isValid}
           variant="outlined"
           className={classes.button}
-          //   onClick={handleConfirm}
+          onClick={handleConfirm}
         >
           <span style={{ margin: "0 0.3rem 0 0" }}>{id ? "Update" : "Create"}</span>
           {id ? <Update /> : <Create />}
@@ -125,7 +194,7 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
         <AlertDialogButton
           enabled={id !== null || id !== undefined}
           handleCancel={async () => console.log("@todo: cancel")}
-          handleOk={async () => console.log("@todo: ok")}
+          handleOk={handleDelete}
           title="Delete alarm monitor entry"
           contentText="Confirm entry deletion"
         />

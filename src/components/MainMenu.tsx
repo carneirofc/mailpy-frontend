@@ -7,6 +7,9 @@ import { RootState } from "../app/store";
 import { useStyles } from "./App";
 
 function MainMenu() {
+  const netRequests = useAppSelector((state) => state.appReducer.networkRequests);
+  const numEntries = useAppSelector((state) => state.mailpy.entries?.length);
+  const numGroups = useAppSelector((state) => state.mailpy.groups?.length);
   const auth = useAppSelector((state: RootState) => state.appReducer.auth);
   const classes = useStyles();
 
@@ -40,6 +43,18 @@ function MainMenu() {
           <ListItemText style={{ textAlign: "center" }} primary={name} secondary={email} />
         </ListItem>
         <SignInButton style={{ marginBottom: "5px", marginTop: "25px" }} />
+      </List>
+      <Divider />
+      <List>
+        <ListItem>
+          <ListItemText style={{ textAlign: "center" }}>Requests on flight {netRequests}</ListItemText>
+        </ListItem>
+        <ListItem>
+          <ListItemText style={{ textAlign: "center" }}>Entries {numEntries}</ListItemText>
+        </ListItem>
+        <ListItem>
+          <ListItemText style={{ textAlign: "center" }}>Groups {numGroups}</ListItemText>
+        </ListItem>
       </List>
     </Drawer>
   );

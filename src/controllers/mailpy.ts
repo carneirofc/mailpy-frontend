@@ -1,4 +1,4 @@
-import { api } from "../data-access";
+import { api, AddEntry, UpdateEntry } from "../data-access";
 import { Condition, Group, Entry } from "mailpy-common";
 
 import store from "../app/store";
@@ -41,6 +41,15 @@ class MailpyController {
     }
   }
 
+  async deleteEntry(id: string): Promise<boolean> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.deleteEntry(id);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
+
   async deleteGroup(id: string): Promise<boolean> {
     store.dispatch(startNetwork());
     try {
@@ -59,10 +68,28 @@ class MailpyController {
     }
   }
 
+  async insertEntry(entry: AddEntry): Promise<Entry> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.postEntry(entry);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
+
   async updateGroup(group: Group): Promise<Group> {
     store.dispatch(startNetwork());
     try {
       return await api.patchGroup(group);
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
+
+  async updateEntry(entry: UpdateEntry): Promise<Entry> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.patchEntry(entry);
     } finally {
       store.dispatch(stopNetwork());
     }

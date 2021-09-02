@@ -1,7 +1,7 @@
 import axios from "axios";
 import https from "https";
 
-import { MailpyApi } from "./interface";
+import { MailpyApi, UpdateEntry, AddEntry } from "./interface";
 import { Condition, ConditionName, Entry, Group, makeCondition, makeEntry, makeGroup } from "mailpy-common";
 
 export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/api"): MailpyApi {
@@ -76,7 +76,8 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
     }
 
     async getEntry(id: string): Promise<Entry> {
-      throw new Error("Method not implemented.");
+      const res = await axiosInstance.get<EntryJson>(Endpoints.GET_ENTRY, { params: { id } });
+      return makeEntry(res.data);
     }
 
     async getGroups(): Promise<Group[]> {
@@ -89,8 +90,9 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
       return makeGroup(res.data);
     }
 
-    patchEntry(entry: Entry): Promise<Entry> {
-      throw new Error("Method not implemented.");
+    async patchEntry(entry: UpdateEntry): Promise<Entry> {
+      const res = await axiosInstance.patch<EntryJson>(Endpoints.PATCH_ENTRY, { ...entry });
+      return makeEntry(res.data);
     }
 
     async patchGroup(group: Group): Promise<Group> {
@@ -98,8 +100,9 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
       return makeGroup(res.data);
     }
 
-    postEntry(entry: Entry): Promise<Entry> {
-      throw new Error("Method not implemented.");
+    async postEntry(entry: AddEntry): Promise<Entry> {
+      const res = await axiosInstance.post<EntryJson>(Endpoints.POST_ENTRY, { ...entry });
+      return makeEntry(res.data);
     }
 
     async postGroup(group: Group): Promise<Group> {
