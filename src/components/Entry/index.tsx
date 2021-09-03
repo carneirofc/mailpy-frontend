@@ -41,15 +41,15 @@ const EntryComponent: FunctionComponent<RouteComponentProps<{}, StaticContext, E
     setEmailTimeout(e.email_timeout);
   }
 
-  const loadGroups = async () => {
+  async function loadGroups() {
     const _groups = await MailpyController.getGroups();
     setGroups(_groups);
-  };
+  }
 
-  const loadEntry = async () => {
+  async function loadEntry() {
     if (!id) return;
     updateEntryState(await MailpyController.getEntry(id));
-  };
+  }
 
   useEffect(() => {
     loadEntry();

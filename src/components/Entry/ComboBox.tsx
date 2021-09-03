@@ -21,7 +21,7 @@ export const ConditionComboBox: FunctionComponent<ConditionComboBoxProps> = ({
   const classes = useStyles();
 
   return (
-    <div>
+    <>
       <TextField
         className={classes.textField}
         select
@@ -37,7 +37,7 @@ export const ConditionComboBox: FunctionComponent<ConditionComboBoxProps> = ({
         ))}
       </TextField>
       <ValueInput condition={condition} setValue={(value) => setAlarmValue(value)} value={alarmValue}></ValueInput>
-    </div>
+    </>
   );
 };
 

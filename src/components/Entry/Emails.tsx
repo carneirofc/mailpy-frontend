@@ -24,26 +24,21 @@ const Emails: FunctionComponent<EmailsProps> = ({
   const classes = useStyles();
 
   return (
-    <div>
-      <TextField
-        label="email timeout (s)"
-        variant="outlined"
-        value={emailTimeout}
-        error={!emailTimeout || emailTimeout <= 0}
-        onChange={(e) => setEmailTimeoutHandler(e.target.value)}
-        className={classes.textField}
-      />
-      <TextField
-        label="new email"
-        variant="outlined"
-        value={emailNew}
-        error={emailNew?.search(/\s/g) !== -1}
-        onChange={(e) => setEmailNew(e.target.value)}
-        className={classes.textField}
-      />
-      <IconButton edge="end" onClick={addEmail}>
-        <Add />
-      </IconButton>
+    <>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <TextField
+          style={{ minWidth: "75%" }}
+          label="new email"
+          variant="outlined"
+          value={emailNew}
+          error={emailNew?.search(/\s/g) !== -1}
+          onChange={(e) => setEmailNew(e.target.value)}
+          className={classes.textField}
+        />
+        <IconButton edge="end" onClick={addEmail}>
+          <Add />
+        </IconButton>
+      </div>
       <List className={classes.list}>
         {emails.map((item, idx) => (
           <ListItem key={`${idx}-${item}`}>
@@ -56,7 +51,15 @@ const Emails: FunctionComponent<EmailsProps> = ({
           </ListItem>
         ))}
       </List>
-    </div>
+      <TextField
+        label="email timeout (s)"
+        variant="outlined"
+        value={emailTimeout}
+        error={!emailTimeout || emailTimeout <= 0}
+        onChange={(e) => setEmailTimeoutHandler(e.target.value)}
+        className={classes.textField}
+      />
+    </>
   );
 };
 export default Emails;

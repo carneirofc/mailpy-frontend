@@ -55,48 +55,49 @@ const Inputs: FunctionComponent<InputsProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <div>
-      <TextField
-        className={classes.textField}
-        label="PV Name"
-        variant="outlined"
-        value={pvname}
-        error={!pvname || pvname.search(" ") !== -1}
-        onChange={(e) => setPvname(e.target.value)}
-      />
-      <TextField
-        className={classes.textField}
-        label="Unit"
-        variant="outlined"
-        error={!unit}
-        value={unit}
-        onChange={(e) => setUnit(e.target.value)}
-      />
-      <TextField
-        className={classes.textField}
-        label="Subject"
-        variant="outlined"
-        value={subject}
-        error={!subject}
-        onChange={(e) => setSubject(e.target.value)}
-      />
-      <TextField
-        className={classes.textField}
-        label="Warning Message"
-        variant="outlined"
-        value={warningMessage}
-        error={!warningMessage}
-        onChange={(e) => setWarningMessage(e.target.value)}
-      />
-      <GroupComboBox group={group} groups={groups} setGroupHandler={setGroupHandler} />
+    <>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+        <TextField
+          className={classes.textField}
+          label="PV Name"
+          variant="outlined"
+          value={pvname}
+          error={!pvname || pvname.search(" ") !== -1}
+          onChange={(e) => setPvname(e.target.value)}
+        />
+        <TextField
+          className={classes.textField}
+          label="Unit"
+          variant="outlined"
+          error={!unit}
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+        />
+        <TextField
+          className={classes.textField}
+          label="Subject"
+          variant="outlined"
+          value={subject}
+          error={!subject}
+          onChange={(e) => setSubject(e.target.value)}
+        />
+        <TextField
+          className={classes.textField}
+          label="Warning Message"
+          variant="outlined"
+          value={warningMessage}
+          error={!warningMessage}
+          onChange={(e) => setWarningMessage(e.target.value)}
+        />
+        <GroupComboBox group={group} groups={groups} setGroupHandler={setGroupHandler} />
 
-      <ConditionComboBox
-        alarmValue={alarmValue}
-        setCondition={setCondition}
-        condition={condition}
-        setAlarmValue={setAlarmValue}
-      />
-
+        <ConditionComboBox
+          alarmValue={alarmValue}
+          setCondition={setCondition}
+          condition={condition}
+          setAlarmValue={setAlarmValue}
+        />
+      </div>
       <Emails
         addEmail={addEmail}
         deleteEmail={deleteEmail}
@@ -106,7 +107,7 @@ const Inputs: FunctionComponent<InputsProps> = ({
         setEmailNew={setEmailNew}
         setEmailTimeoutHandler={setEmailTimeoutHandler}
       />
-    </div>
+    </>
   );
 };
 export default Inputs;
