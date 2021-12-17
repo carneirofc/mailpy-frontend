@@ -1,7 +1,7 @@
 /**
  * Encapsulation of the identity of the user.
  */
-class Identity {
+export class Identity {
   constructor(tokenResponse) {
     this.account = tokenResponse.account;
     this.idToken = tokenResponse.idToken;
@@ -29,4 +29,3 @@ class Identity {
     return this.accessToken;
   }
 }
-export default Identity;

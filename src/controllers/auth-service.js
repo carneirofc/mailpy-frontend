@@ -1,5 +1,5 @@
 import * as msal from "@azure/msal-browser";
-import Identity from "../model/Identity";
+import { Identity } from "../model";
 import InteractiveSignInRequired from "../utils/InteractiveSignInRequired";
 import { auth, cache, silentRequest, tokenRequest, loginRequest } from "../configs/msal";
 
