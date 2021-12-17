@@ -1,10 +1,19 @@
 import { api, AddEntry, UpdateEntry } from "../data-access";
-import { Condition, Group, Entry } from "mailpy-common";
+import { Condition, Group, Entry, Event } from "mailpy-common";
 
 import store from "../app/store";
 import { startNetwork, stopNetwork } from "../actions";
 
 class MailpyController {
+  async getEvents(): Promise<Event[]> {
+    store.dispatch(startNetwork());
+    try {
+      return await api.getEvents();
+    } finally {
+      store.dispatch(stopNetwork());
+    }
+  }
+
   async getEntries(): Promise<Entry[]> {
     store.dispatch(startNetwork());
     try {

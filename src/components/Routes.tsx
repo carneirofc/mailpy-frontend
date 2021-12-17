@@ -7,6 +7,7 @@ import Groups from "./Groups";
 import Group from "./Group";
 import Conditions from "./Conditions";
 import Home from "./Home";
+import Events from "./Events";
 
 function Routes() {
   const classes = useStyles();
@@ -19,6 +20,7 @@ function Routes() {
         <Route path="/entry" component={Entry} />
         <Route path="/groups" component={Groups} />
         <Route path="/group" component={Group} />
+        <Route path="/events" component={Events} />
         <Route path="/conditions" component={Conditions} />
         <Route path="*">
           <Redirect to="/" />

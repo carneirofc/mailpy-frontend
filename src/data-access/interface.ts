@@ -1,4 +1,4 @@
-import { Condition, Entry, Group } from "mailpy-common";
+import { Condition, Entry, Event, Group } from "mailpy-common";
 
 export interface AddEntry {
   group_id: string;
@@ -17,6 +17,7 @@ export interface UpdateEntry extends AddEntry {
 }
 
 export interface MailpyApi {
+  getEvents(): Promise<Event[]>;
   getConditions(): Promise<Condition[]>;
   getEntries(): Promise<Entry[]>;
   getEntry(id: string): Promise<Entry>;

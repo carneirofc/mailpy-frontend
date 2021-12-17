@@ -21,6 +21,7 @@ function MainMenu() {
       { name: "Home", target: "/home" },
       { name: "Entries", target: "/entries" },
       { name: "Groups", target: "/groups" },
+      { name: "Events", target: "/events" },
       { name: "Conditions", target: "/conditions" },
     ].map(({ name, target }, idx) => <ListItemLink primary={name} to={target} key={`${idx}`} />);
   };

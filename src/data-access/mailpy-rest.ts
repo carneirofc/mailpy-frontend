@@ -2,11 +2,13 @@ import axios from "axios";
 import https from "https";
 
 import { MailpyApi, UpdateEntry, AddEntry } from "./interface";
-import { Condition, ConditionName, Entry, Group, makeCondition, makeEntry, makeGroup } from "mailpy-common";
+import { Condition, ConditionName, Entry, Event, Group, makeCondition, makeEntry, makeGroup } from "mailpy-common";
 
 export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/api"): MailpyApi {
   // At instance level
   const Endpoints = {
+    GET_EVENTS: `${endpoint}/events`,
+
     DELETE_ENTRY: `${endpoint}/entry`,
     GET_ENTRIES: `${endpoint}/entries`,
     GET_ENTRY: `${endpoint}/entry`,
@@ -53,8 +55,21 @@ export default function makeMailpyApi(endpoint = "https://localhost:1337/mailpy/
     unit: string;
     warning_message: string;
   }
+  interface EventJson {
+    id: string;
+    ts: string;
+    type: number;
+    data: any;
+  }
 
   class MailpyApiImpl implements MailpyApi {
+    async getEvents(): Promise<Event[]> {
+      const res = await axiosInstance.get<EventJson[]>(Endpoints.GET_EVENTS);
+      return res.data.map(({ id, ts, type, data }) => {
+        return { id, ts: new Date(ts), type, data };
+      });
+    }
+
     async deleteEntry(id: string): Promise<boolean> {
       const res = await axiosInstance.delete(Endpoints.DELETE_ENTRY, { data: { id } });
       return res.status === 200;

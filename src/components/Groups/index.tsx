@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { IconButton } from "@material-ui/core";
-import { Refresh } from "@material-ui/icons";
 import { DataGrid } from "@material-ui/data-grid";
+import { IconButton } from "@material-ui/core";
 import { LocationDescriptor } from "history";
+import { Refresh } from "@material-ui/icons";
+import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchGroups } from "../../actions/mailpy";

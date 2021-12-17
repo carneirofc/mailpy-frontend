@@ -2,13 +2,14 @@ import Typography from "@material-ui/core/Typography";
 import ButtonProtected from "./ButtonProtected";
 import { useAppDispatch } from "../app/hooks";
 import { useEffect } from "react";
-import { fetchConditions, fetchEntries, fetchGroups } from "../actions/mailpy";
+import { fetchConditions, fetchEntries, fetchGroups, fetchEvents } from "../actions/mailpy";
 function Home() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchConditions());
     dispatch(fetchEntries());
     dispatch(fetchGroups());
+    dispatch(fetchEvents());
   }, []);
   return (
     <>
